@@ -62,5 +62,4 @@ it.only('Using Get With Find and Eq', () => {
         .find('aside')
         .find('div').eq(4)
         .click();
-
 })
