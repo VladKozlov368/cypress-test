@@ -128,3 +128,65 @@
 //         .should('eq', 'https://next.privat24.ua/?lang=en')
 // })
 
+// it('length',() => {
+//     cy.viewport(1500,1000)
+//     cy.visit('https://www.olx.ua/uk/')
+//     cy.get('#topLoginLink')
+//         .click()
+//     cy.get('#register_tab')
+//         .click()
+//     cy.get('.f_checkbox').eq(0)
+//         .should('not.contain','selected')
+//         .click()
+//         .should('contain','selected')
+//
+// })
+
+
+// it('type',() =>{
+//     cy.visit('https://next.privat24.ua/mobile?lang=en')
+//         .get('[data-qa-node="phone-number"]')
+//         .type(112233344)
+// })
+
+// it('focus',() =>{
+//     cy.visit('https://next.privat24.ua/mobile?lang=en')
+//         .get('[data-qa-node="amount"]')
+//         .focus()
+// })
+
+// it('blur',() =>{
+//     cy.visit('https://next.privat24.ua/mobile?lang=en')
+//         .get('[data-qa-node="amount"]')
+//         .focus()
+//         .blur()
+// })
+
+// it('click',() =>{
+//     cy.viewport(1500,1500)
+//     cy.visit('https://yari-demos.prod.mdn.mozit.cloud/en-US/docs/Web/API/Element/dblclick_event/_sample_.examples.html')
+//         .contains('My Card')
+//         .dblclick()
+// })
+
+// it('check',() =>{
+//     cy.viewport(1500,1500)
+//     cy.visit('http://privatbank.ua/')
+//         .get('#switch-input')
+//         .check({force: true})
+//         .wait(2000)
+//         .uncheck({force: true})
+// })
+
+// it('scrollTo',() =>{
+//     cy.visit('https://next.privat24.ua/')
+//         .get('[data-qa-node="lang"]')
+//         .wait(2000)
+//     cy.scrollTo(0,500)
+// })
+
+it('trigger',() =>{
+    cy.visit('https://next.privat24.ua/&lang=en')
+        .get('div[data-qa-node="menu"]').eq(1)
+        .trigger('mouseover')
+})
