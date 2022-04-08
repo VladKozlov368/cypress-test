@@ -1,77 +1,34 @@
 ///<reference types="Cypress"/ >
 
-// it('Replenishment of UKR mobile phone', () => {
-//     cy.visit('https://next.privat24.ua/mobile')
-//         .get('[data-qa-node="phone-number"]')
-//         .type("933200136")
-//         .get('[data-qa-node="amount"]')
-//         .type("1")
-//         .get('[data-qa-node="numberdebitSource"]')
-//         .type ("4552331448138217")
-//         .get('[data-qa-node="expiredebitSource"]')
-//         .type("0524")
-//         .get('[data-qa-node="cvvdebitSource"]')
-//         .type("111")
-//         .wait(3000)
-//         .get('[data-qa-node="submit"]')
-//         .click()
-//         .wait(3000)
-//         .get('[data-qa-node="firstNamedebitSource"]')
-//         .type("Slava")
-//         .get('[data-qa-node="lastNamedebitSource"]')
-//         .type("Loshenko")
-//         .get('[data-qa-node="submit"]')
-//         .click()
-//         .get('[data-qa-node="card"]')
-//         .should('have.text','4552 **** **** 8217')
-//         .get('[data-qa-node="amount"]').eq(1)
-//         .should('contain.text','1')
-//         .should('contain.text','UAH')
-//         .get('[data-qa-node="commission"]').eq(1)
-//         .should('have.text','2','UAH')
-// })
+import {mobileReplenishment} from "../support/pager/mobileReplenishment";
+import {transfers} from "../support/pager/transfer";
+import {basePage} from "../support/pager/basePage";
+
+it('Replenishment of UKR mobile phone', () => {
+    basePage.open('https://next.privat24.ua/mobile');
+    mobileReplenishment.typePhoneNumber('933200136');
+    basePage.typeAmout('1');
+    basePage.typeDebitCardData('4552331448138217', '0524', '111');
+    cy.wait(3000);
+    basePage.submitPayment();
+    cy.wait(3000);
+    mobileReplenishment.typeFullName('Slava', 'Loshenko');
+    basePage.submitPayment();
+    mobileReplenishment.checkDebitCard('4552 **** **** 8217');
+    mobileReplenishment.checkDebitAmount('1', 'UAH');
+    mobileReplenishment.checkDebitCommission('2', 'UAH');
+});
 
 
 it('Money transfer between foreign cards', () => {
-cy.visit('https://next.privat24.ua/money-transfer/card')
-    .get('[data-qa-node="numberdebitSource"]')
-    .type ("4552331448138217")
-    .get('[data-qa-node="expiredebitSource"]')
-    .type("0524")
-    .get('[data-qa-node="cvvdebitSource"]')
-    .type("111")
-    .get('[data-qa-node="firstNamedebitSource"]')
-    .type("Slava")
-    .get('[data-qa-node="lastNamedebitSource"]')
-    .type("Loshenko")
-    .get('[data-qa-node="numberreceiver"]')
-    .type('4486441729154030')
-    .get('[data-qa-node="amount"]')
-    .type('1500')
-    .get('[data-qa-node="currency"]')
-    .click()
-    .get('[data-qa-node="currency-option"]').contains('UAH')
-    .click()
-    .wait(2000)
-    .get('[data-qa-node="toggle-comment"]')
-    .click()
-    .get('[data-qa-node="comment"]')
-    .type('Cypress test')
-    .get('button[type="submit"]')
-    .wait(2000)
-    .click()
-    .wait(2000)
-    .get('[data-qa-node="payer-card"]')
-    .should('have.text', '4552 3314 4813 8217')
-    .get('.sideA_cakTArHgwR')
-    .scrollIntoView()
-    .get('[data-qa-node="receiver-card"]')
-    .should('have.text', '4486 4417 2915 4030')
-    .get('[data-qa-node="receiver-amount"]')
-    .should('have.text', '1 500 UAH')
-    .get('[data-qa-node="receiver-currency"]')
-    .should('have.text', '0 UAH')
-    .get('[data-qa-node="total"]')
-    .should('contain.text','1 617.28')
-
-})
+    basePage.open('https://next.privat24.ua/money-transfer/card');
+    basePage.typeDebitCardData('4552331448138217', '0524', '111');
+    transfers.typeDebitFullName('Slava', 'Loshenko');
+    transfers.typeRecieverCard('4486441729154030');
+    basePage.typeAmout('1500');
+    transfers.typeComment('Cypress test');
+    basePage.submitPayment();
+    transfers.checkDebitAndRecieverCards('4552 3314 4813 8217', '4486 4417 2915 4030');
+    transfers.checkRecieverAmountAndTotal('1 500 UAH', '1 617.28');
+    transfers.checkResieverCurrency('0 UAH');
+});
